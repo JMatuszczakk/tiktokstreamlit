@@ -21,6 +21,7 @@ st.success("Żeby działało trzeba wkleić czysty link taki jak ten: https://ww
 url = st.text_input('Wpisz url tiktoka')
 chart = st.line_chart()
 current_stats = st.empty()
+progress_bar = st.progress(0)
 
 if url != '':
     # Extract the video ID from the TikTok URL
@@ -47,4 +48,7 @@ if url != '':
         # Save data to Excel file
         with pd.ExcelWriter(filename, mode='w') as writer:
             df.to_excel(writer, index=False, header=True, sheet_name='Sheet1')
-        time.sleep(5)
+        for i in range(100):
+            time.sleep(0.05)
+            progress_bar.progress(i + 1)
+        progress_bar.empty()
