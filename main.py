@@ -48,6 +48,7 @@ if url != '':
         # Check if the video has more than 0 views and if it's the first time it has more than 0 views
         if views > 0 and df['Number of Views'].iloc[-2] == 0:
             st.balloons()
+            st.toast("Film ruszył!", icon="🎉")
         # Save data to Excel file
         with pd.ExcelWriter(filename, mode='w') as writer:
             df.to_excel(writer, index=False, header=True, sheet_name='Sheet1')
