@@ -37,7 +37,7 @@ if url != '':
     else:
         df = pd.DataFrame({'Time': [], 'Number of Views': [], 'Number of Likes': []})
 
-    last_two_minutes = []
+    last_ten_seconds = []
     while True:
         views, likes = getStats(url)
 
@@ -45,12 +45,11 @@ if url != '':
         df = pd.concat([df, new_data], ignore_index=True)
         chart.area_chart({'Number of Views': df['Number of Views'], 'Number of Likes (*10)': df['Number of Likes'] * 10})
 
-        # Add current views and timestamp to last_two_minutes
-        last_two_minutes.append((views, datetime.now()))
+        # Add current views and timestamp to last_ten_seconds
+        last_ten_seconds.append((views, datetime.now()))
 
-        # Remove views and timestamps that are older than two minutes
-        last_two_minutes = [(v, t) for v, t in last_two_minutes if datetime.now() - t < timedelta(minutes=2)]
-
+        # Remove views and timestamps that are older than ten seconds
+        last_ten_seconds = [(v, t) for v, t in last_ten_seconds if datetime.now() - t < timedelta(seconds=10)]
 
         if len(df) >= 2 and views > 0 and df['Number of Views'].iloc[-2] == 0:
             st.balloons()
@@ -62,9 +61,11 @@ if url != '':
         views_metric.metric("👀", f"{views:,}")
 
         try:
-            view_rate = views - df['Number of Views'].iloc[-10]
+            view_rate = (views - last_ten_seconds[0][0]) / (datetime.now() - last_ten_seconds[0][1]).total_seconds()
         except:
             view_rate = 0
+
+        viewrate_metric.metric("View Rate", f"{view_rate:.2f}")
 
         with pd.ExcelWriter(filename, mode='w') as writer:
             df.to_excel(writer, index=False, header=True, sheet_name='Sheet1')
