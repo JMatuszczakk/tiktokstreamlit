@@ -1,3 +1,4 @@
 streamlit
 tiktokapipy
 pandas
+openpyxl
