@@ -18,9 +18,15 @@ st.success("Żeby działało trzeba wkleić czysty link taki jak ten: https://ww
 
 url = st.text_input('Wpisz url tiktoka')
 chart = st.line_chart()
-current_stats = st.empty()
+col1, col2, col3 = st.columns(3)
+likes_metric = col1.metric("👍", "0")
+views_metric = col2.metric("👀", "0")
+
 progress_bar = st.progress(0)
 st.text_input("Podaj nazwe tiktoka jeśli chesz")
+
+from datetime import datetime, timedelta
+
 
 if url != '':
     video_id = re.search(r'(?<=video/)[^/]+', url).group()
@@ -30,16 +36,36 @@ if url != '':
     else:
         df = pd.DataFrame({'Time': [], 'Number of Views': [], 'Number of Likes': []})
 
+    last_two_minutes = []
     while True:
         views, likes = getStats(url)
 
         new_data = pd.DataFrame({'Time': [time.strftime('%Y-%m-%d %H:%M:%S')], 'Number of Views': [views], 'Number of Likes': [likes]})
         df = pd.concat([df, new_data], ignore_index=True)
         chart.area_chart({'Number of Views': df['Number of Views'], 'Number of Likes (*10)': df['Number of Likes'] * 10})
-        current_stats.info(f"👀 Obecna ilość wyświetleń: {views}\n 👍 Ilość lików: {likes}")
+
+        # Add current views and timestamp to last_two_minutes
+        last_two_minutes.append((views, datetime.now()))
+
+        # Remove views and timestamps that are older than two minutes
+        last_two_minutes = [(v, t) for v, t in last_two_minutes if datetime.now() - t < timedelta(minutes=2)]
+
+
         if len(df) >= 2 and views > 0 and df['Number of Views'].iloc[-2] == 0:
             st.balloons()
             st.toast("Film ruszył!", icon="🎉")
+        
+        # Display metrics for likes, views, and view rate in three columns
+        
+        likes_metric.metric("👍", f"{likes:,}")
+        views_metric.metric("👀", f"{views:,}")
+
+        try:
+            view_rate = views - df['Number of Views'].iloc[-10]
+        except:
+            view_rate = 0
+        col3.metric("View Rate", f"{view_rate:,}")
+
         with pd.ExcelWriter(filename, mode='w') as writer:
             df.to_excel(writer, index=False, header=True, sheet_name='Sheet1')
         for i in range(100):
