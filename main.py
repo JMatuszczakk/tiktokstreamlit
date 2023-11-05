@@ -28,7 +28,7 @@ if url != '':
         df = pd.read_excel(filename)
     else:
         df = pd.DataFrame({'Time': [], 'Number of Views': [], 'Number of Likes': []})
-    views = 0
+    views, likes = 0
     while True:
         try:
             views, likes = getStats(url)
