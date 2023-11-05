@@ -36,7 +36,7 @@ if url != '':
         df = pd.concat([df, new_data], ignore_index=True)
         chart.line_chart(df['Number of Views'])
         current_stats.info(f"👀 Obecna ilość wyświetleń: {views}\n 👍 Ilość lików: {likes}")
-        if views > 0 and df['Number of Views'].iloc[-2] == 0:
+        if len(df) >= 2 and views > 0 and df['Number of Views'].iloc[-2] == 0:
             st.balloons()
             st.toast("Film ruszył!", icon="🎉")
         with pd.ExcelWriter(filename, mode='w') as writer:
