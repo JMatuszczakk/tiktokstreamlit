@@ -31,8 +31,8 @@ if url != '':
     while True:
         try:
             views, likes = getStats(url)
-        except:
-            pass
+        except Exception as e:
+            print(e)
         new_data = pd.DataFrame({'Time': [time.strftime('%Y-%m-%d %H:%M:%S')], 'Number of Views': [views], 'Number of Likes': [likes]})
         df = pd.concat([df, new_data], ignore_index=True)
         chart.line_chart(df['Number of Views'])
