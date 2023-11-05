@@ -26,6 +26,9 @@ viewrate_metric = col3.metric("View Rate", "0")
 progress_bar = st.progress(0)
 st.text_input("Podaj nazwe tiktoka jeśli chesz")
 
+from datetime import datetime, timedelta
+
+
 if url != '':
     video_id = re.search(r'(?<=video/)[^/]+', url).group()
     filename = f'{video_id}.xlsx'
@@ -34,7 +37,7 @@ if url != '':
     else:
         df = pd.DataFrame({'Time': [], 'Number of Views': [], 'Number of Likes': []})
 
-    last_ten_rows = []
+    last_ten_seconds = []
     while True:
         views, likes = getStats(url)
 
@@ -42,11 +45,11 @@ if url != '':
         df = pd.concat([df, new_data], ignore_index=True)
         chart.area_chart({'Number of Views': df['Number of Views'], 'Number of Likes (*10)': df['Number of Likes'] * 10})
 
-        # Add current views and timestamp to last_ten_rows
-        last_ten_rows.append((views, datetime.now()))
+        # Add current views and timestamp to last_ten_seconds
+        last_ten_seconds.append((views, datetime.now()))
 
-        # Remove rows that are older than ten rows
-        last_ten_rows = last_ten_rows[-10:]
+        # Remove views and timestamps that are older than ten seconds
+        last_ten_seconds = [(v, t) for v, t in last_ten_seconds if datetime.now() - t < timedelta(seconds=10)]
 
         if len(df) >= 2 and views > 0 and df['Number of Views'].iloc[-2] == 0:
             st.balloons()
@@ -58,7 +61,7 @@ if url != '':
         views_metric.metric("👀", f"{views:,}")
 
         try:
-            view_rate = (views - last_ten_rows[0][0]) / (len(last_ten_rows) - 1)
+            view_rate = (views - last_ten_seconds[0][0]) / (datetime.now() - last_ten_seconds[0][1]).total_seconds()
         except:
             view_rate = 0
 
