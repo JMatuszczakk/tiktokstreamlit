@@ -33,10 +33,7 @@ if url != '':
         # Create a new Excel file if it doesn't exist
         df = pd.DataFrame({'Time': [], 'Number of Views': []})
     while True:
-        try:
-            views = getViews(url)
-        except:
-            pass
+        views = getViews(url)
         # Update the data frame with new view count
         new_data = pd.DataFrame({'Time': [time.strftime('%Y-%m-%d %H:%M:%S')], 'Number of Views': [views]})
         df = pd.concat([df, new_data], ignore_index=True)
