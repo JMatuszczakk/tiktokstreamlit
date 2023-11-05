@@ -20,6 +20,7 @@ url = st.text_input('Wpisz url tiktoka')
 chart = st.line_chart()
 current_stats = st.empty()
 progress_bar = st.progress(0)
+st.input("Podaj nazwe tiktoka jeśli chesz")
 
 if url != '':
     video_id = re.search(r'(?<=video/)[^/]+', url).group()
