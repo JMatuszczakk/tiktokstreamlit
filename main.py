@@ -51,4 +51,6 @@ if url != '':
         for i in range(100):
             time.sleep(0.05)
             progress_bar.progress(i + 1)
-        progress_bar.empty()
+        for i in range(100, 0, -1):
+            time.sleep(0.05)
+            progress_bar.progress(i - 1)
