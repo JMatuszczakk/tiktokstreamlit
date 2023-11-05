@@ -35,7 +35,7 @@ if url != '':
 
         new_data = pd.DataFrame({'Time': [time.strftime('%Y-%m-%d %H:%M:%S')], 'Number of Views': [views], 'Number of Likes': [likes]})
         df = pd.concat([df, new_data], ignore_index=True)
-        chart.line_chart(df['Number of Views'])
+        chart.area_chart({'Number of Views': df['Number of Views'], 'Number of Likes (scaled down)': df['Number of Likes'] * 20})
         current_stats.info(f"👀 Obecna ilość wyświetleń: {views}\n 👍 Ilość lików: {likes}")
         if len(df) >= 2 and views > 0 and df['Number of Views'].iloc[-2] == 0:
             st.balloons()
