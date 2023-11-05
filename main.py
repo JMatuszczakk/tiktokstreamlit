@@ -6,7 +6,7 @@ import os.path
 import re
 import subprocess
 
-subprocess.run("playwright", "install")
+subprocess.run(["playwright", "install"])
 
 
 
