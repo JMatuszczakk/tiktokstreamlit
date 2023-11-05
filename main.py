@@ -65,7 +65,6 @@ if url != '':
             view_rate = views - df['Number of Views'].iloc[-10]
         except:
             view_rate = 0
-        view_rate.metric("View Rate", f"{view_rate:,}")
 
         with pd.ExcelWriter(filename, mode='w') as writer:
             df.to_excel(writer, index=False, header=True, sheet_name='Sheet1')
