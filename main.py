@@ -15,7 +15,7 @@ def getStats(url):
         return video.stats.play_count, video.stats.digg_count
 
 st.warning("Jeśli nic nie widać, to znaczy, że aplikacja się ładuje.", icon="🚨")
-st.warning("Żeby działało trzeba wkleić czysty link taki jak ten: https://www.tiktok.com/@codzienieciekawostka/video/7298018042145983777", icon="🔥")
+st.success("Żeby działało trzeba wkleić czysty link taki jak ten: https://www.tiktok.com/@codzienieciekawostka/video/7298018042145983777", icon="🔥")
 
 # Create the chart and current views/likes count outside the main loop
 url = st.text_input('Wpisz url tiktoka')
@@ -43,7 +43,7 @@ if url != '':
         # Update the chart with new data
         chart.line_chart(df['Number of Views'])
         # Update the current views/likes count
-        current_stats.success(f"👀 Obecna ilość wyświetleń: {views}\n 👍 Ilość lików: {likes}")
+        current_stats.info(f"👀 Obecna ilość wyświetleń: {views}\n 👍 Ilość lików: {likes}")
         # Save data to Excel file
         with pd.ExcelWriter(filename, mode='w') as writer:
             df.to_excel(writer, index=False, header=True, sheet_name='Sheet1')
