@@ -21,7 +21,7 @@ chart = st.line_chart()
 col1, col2, col3 = st.columns(3)
 likes_metric = col1.metric("👍", "0")
 views_metric = col2.metric("👀", "0")
-viewrate_metric = col3.metric("View Rate", "0")
+
 
 progress_bar = st.progress(0)
 st.text_input("Podaj nazwe tiktoka jeśli chesz")
@@ -65,7 +65,6 @@ if url != '':
         except:
             view_rate = 0
 
-        viewrate_metric.metric("View Rate", f"{view_rate:.2f}")
 
         with pd.ExcelWriter(filename, mode='w') as writer:
             df.to_excel(writer, index=False, header=True, sheet_name='Sheet1')
