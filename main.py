@@ -5,11 +5,12 @@ import time
 import os.path
 import re
 import subprocess
+subprocess.run(["pip3", "install", "scikit-learn"])
 from sklearn.linear_model import LinearRegression
 import numpy as np
 
 subprocess.run(["playwright", "install"])
-subprocess.run(["pip3", "install", "scikit-learn"])
+
 
 def getStats(url):
     with TikTokAPI() as api:
