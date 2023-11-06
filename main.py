@@ -5,8 +5,11 @@ import time
 import os.path
 import re
 import subprocess
+from sklearn.linear_model import LinearRegression
+import numpy as np
 
 subprocess.run(["playwright", "install"])
+subprocess.run(["pip3", "install", "scikit-learn"])
 
 def getStats(url):
     with TikTokAPI() as api:
@@ -65,6 +68,13 @@ if url != '':
         except:
             view_rate = 0
 
+        # Perform linear regression on the data
+        X = np.array(df['Number of Likes']).reshape(-1, 1)
+        y = np.array(df['Number of Views']).reshape(-1, 1)
+        model = LinearRegression().fit(X, y)
+        predicted_views = model.predict([[likes]])[0][0]
+
+        st.write(f"Predicted future view count: {predicted_views:.0f}")
 
         with pd.ExcelWriter(filename, mode='w') as writer:
             df.to_excel(writer, index=False, header=True, sheet_name='Sheet1')
