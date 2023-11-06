@@ -41,6 +41,7 @@ if url != '':
         df = pd.DataFrame({'Time': [], 'Number of Views': [], 'Number of Likes': []})
 
     last_ten_seconds = []
+    predicted_views_message = st.empty()
     while True:
         views, likes = getStats(url)
 
@@ -74,7 +75,8 @@ if url != '':
         model = LinearRegression().fit(X, y)
         predicted_views = model.predict([[likes]])[0][0]
 
-        st.write(f"Predicted future view count: {predicted_views:.0f}")
+        predicted_views_message.markdown(f"Predicted future view count: {predicted_views:.0f}")
+        time.sleep(1)
 
         with pd.ExcelWriter(filename, mode='w') as writer:
             df.to_excel(writer, index=False, header=True, sheet_name='Sheet1')
